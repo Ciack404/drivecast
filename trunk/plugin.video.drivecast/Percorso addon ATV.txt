@@ -1,0 +1,5 @@
+ADDON
+/Users/frontrow/Library/Application\ Support/XBMC/addons/
+
+LOG
+/Users/frontrow/Library/Logs
