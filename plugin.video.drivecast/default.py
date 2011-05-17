@@ -18,12 +18,12 @@ def MENU():
 	aut = b64encode(username+':'+password)	#AUTENTICAZIONE IN BASE64
 	addDir(__language__(30002),__url__,"1",__thumbnails__+"settings.png","")
 	addPLAYLIST(read_resource(__url__, aut, "playlist"))
-	addDir(__language__(30004),__url__,"2",__thumbnails__+"prova.png","")
+	addDir(__language__(30004),__url__,"2",__thumbnails__+"change_user.png","")
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def addPLAYLIST(playl):
 	for pl in playl["elements"]:
-		addDir("[PL] "+pl["name"],__url__,"1",__thumbnails__+"settings.png",pl["name"])
+		addDir("[PL] "+pl["name"],__url__,"1",__thumbnails__+"playlist.png",pl["name"])
 
 #========================================================================================
 #	LOGIN - VISUALIZZATO NELLE CONFIGURAZIONI									<<<OK>>>>
