@@ -170,5 +170,9 @@ elif mode == 1:
 	listing(rss,pl)
 elif mode == 2:
 	logout()
+	rss = None
+	while rss==None:
+		rss = log()
+	MENU()
 	#xbmc.executebuiltin("Container.Update")
 	#xbmc.executebuiltin("ReplaceWindow(10000,plugin://video/)")
