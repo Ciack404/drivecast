@@ -1,0 +1,9 @@
+ottengo playlist tramite
+read_resource(__url__, aut, "playlist")
+
+ottengo feed tramite
+read_resource(__url__, aut, "feed")
+
+ottengo rss
+
+
