@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addons>
 <addon id="repo.drivecast"
         name="DriveCast repository"
         version="0.1"
         provider-name="InRete">
+    </requires>
+    	<import addon="script.module.simplejson" version="2.0.10"/>
+    </requires>
     <extension point="xbmc.addon.repository"
         name="DriveCast Add-on Repository">
         <info>http://drivecast.googlecode.com/svn/trunk/addons.xml</info>
@@ -16,3 +20,4 @@
         <platform>all</platform>
     </extension>
 </addon>
+</addons>
