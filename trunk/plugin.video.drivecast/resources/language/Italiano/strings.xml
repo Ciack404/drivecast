@@ -5,4 +5,8 @@
     <string id="30001">Password</string>
     <string id="30002">Libreria</string>
     <string id="30003">Login</string>
+    <string id="30004">Logout</string>
+    <string id="30005">Login corretto</string>
+    <string id="30006">Login fallito</string>
+    <string id="30007">Aggiornamento cartella</string>
 </strings>

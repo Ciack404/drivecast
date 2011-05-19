@@ -16,14 +16,18 @@ def MENU():
 	username = __settings__.getSetting("login_name")	#USERNAME
 	password = __settings__.getSetting("login_pass")	#PASSWORD
 	aut = b64encode(username+':'+password)	#AUTENTICAZIONE IN BASE64
-	addDir(__language__(30002),__url__,"1",__thumbnails__+"settings.png","")
+	addDir(__language__(30002),"1",__thumbnails__+"library.png","")
 	addPLAYLIST(read_resource(__url__, aut, "playlist"))
-	addDir(__language__(30004),__url__,"2",__thumbnails__+"change_user.png","")
+	addDir(__language__(30004),"2",__thumbnails__+"user.png","")
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
+	
 def addPLAYLIST(playl):
 	for pl in playl["elements"]:
-		addDir("[PL] "+pl["name"],__url__,"1",__thumbnails__+"playlist.png",pl["name"])
+		addDir("----------  "+pl["name"],"1",__thumbnails__+"pl.png",pl["name"])	#u'\U0001D15F'
+
+def log_menu():
+	addDir("Login",None,__thumbnails__+"user.png","")
+	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 #========================================================================================
 #	LOGIN - VISUALIZZATO NELLE CONFIGURAZIONI									<<<OK>>>>
@@ -31,7 +35,7 @@ def addPLAYLIST(playl):
 def log():
 	username = __settings__.getSetting("login_name")	#USERNAME
 	password = __settings__.getSetting("login_pass")	#PASSWORD
-	if(username=="" or password==""):
+	if username=="" or password=="":
 		return login()
 	else:
 		aut = b64encode(username+':'+password)	#AUTENTICAZIONE IN BASE64
@@ -44,10 +48,13 @@ def login():
 	aut = b64encode(username+':'+password)	#AUTENTICAZIONE IN BASE64
 	try:
 		rss = read_RSS(read_resource(__url__, aut, "feed"))
+		xbmc.executebuiltin("Notification("+__language__(30005)+","+__language__(30007)+")")
 		return rss
 	except:
+		xbmc.executebuiltin("Notification("+__language__(30006)+","+__language__(30007)+")")
 		__settings__.setSetting("login_name",'')	#USERNAME
 		__settings__.setSetting("login_pass",'')	#PASSWORD
+		return None
 
 #========================================================================================
 #	LOGOUT																		<<<OK>>>>
@@ -118,9 +125,9 @@ def addLink(name,url,iconimage):
 	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
 	return ok
 
-def addDir(name,url,mode,iconimage,playlist):
+def addDir(name,mode,iconimage,playlist):
 	ok=True
-	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&playlist="+playlist
+	u=sys.argv[0]+"?mode="+str(mode)+"&playlist="+playlist
 	liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
 	liz.setInfo( type="Video", infoLabels={ "Title": name } )
 	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
@@ -156,23 +163,21 @@ def get_params():
 params=get_params()
 mode=None
 
-rss = log()
-
 try:
 	mode=int(params["mode"])
 	pl=str(params["playlist"])
 except:
 	pass
 
-if mode==None:
+rss = log()
+
+if rss == None:
+	log_menu()
+elif mode==None:
 	MENU()
 elif mode == 1:
 	listing(rss,pl)
 elif mode == 2:
 	logout()
-	rss = None
-	while rss==None:
-		rss = log()
-	MENU()
-	#xbmc.executebuiltin("Container.Update")
+	xbmc.executebuiltin("Container.Update("+sys.argv[0]+")")
 	#xbmc.executebuiltin("ReplaceWindow(10000,plugin://video/)")
