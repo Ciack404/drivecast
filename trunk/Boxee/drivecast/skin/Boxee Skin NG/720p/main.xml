@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<window type="window" id="14000">
+	<defaultcontrol always="true">25</defaultcontrol>
+	<allowoverlay>no</allowoverlay>
+	<onload lang="python"><![CDATA[
+	]]></onload>
+	<controls>
+		<include>Common_Background</include>
+		<include>Common_Status</include>
+		<control type="group">
+			<control type="label">
+				<include>BrowseMainTitle</include>
+				<label>[COLOR red]DriveCast[/COLOR]</label>
+			</control>
+			<control type="label" id="110">
+				<include>BrowseSubTitle</include>
+				<posx>320</posx>
+				<label>[UPPERCASE]beta[/UPPERCASE]</label>
+			</control>
+		</control>
+		<control type="list" id="100">
+			<posx>200</posx>
+			<posy>50</posy>
+			<width>800</width>
+			<height>100</height>
+			<orientation>horizontal</orientation>
+			<itemlayout width="200" height="100">
+				<control type="label">
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>200</width>
+					<height>100</height>
+					<align>left</align>
+					<aligny>center</aligny>
+					<label>CACCA</label>
+					<textcolor>white</textcolor>
+				</control>
+			</itemlayout>
+		</control>
+	</controls>
+</window>

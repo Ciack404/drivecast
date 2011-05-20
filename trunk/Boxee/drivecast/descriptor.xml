@@ -1,0 +1,17 @@
+<app>
+	<id>drivecast</id>
+	<name>DriveCast</name>
+	<version>0.1</version>
+	<description>Drivecast application for Boxee</description>
+	<thumb>http://drivecast.googlecode.com/svn/trunk/drivecast.png</thumb>
+	<repository>http://dir.boxee.tv/apps</repository>
+	<media>video</media>
+	<copyright>InRete</copyright>
+	<email>support@boxee.tv</email>
+	<type>skin</type>
+	<startWindow>14000</startWindow>
+	<platform>all</platform>
+	<minversion>0.9.21</minversion>
+	<test-app>true</test-app>
+</app>
+
