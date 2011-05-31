@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<window type="window" id="15000"><!--  -->
+	<defaultcontrol always="true">1200</defaultcontrol>
+	<allowoverlay>no</allowoverlay>
+	<onload lang="python"><![CDATA[
+#import drivecast, mc
+
+#playlists = read_RSS(read_resource("AUTENTICAZIONE", "playlist"))
+#rss = read_RSS(read_resource("AUTENTICAZIONE", "feed"))
+
+	]]></onload>
+	<controls>
+		<include>Common_Background</include>
+		<include>Common_Status</include>
+		<control type="group"><!-- BACKGROUND -->
+			<control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1280</width>
+                <height>720</height>
+                <texture>bg2.png</texture>
+            </control>
+			<control type="button" id="1203"><!-- LOGOUT -->
+				<posx>1100</posx>
+				<posy>20</posy>
+				<width>100</width>
+				<height>40</height>
+				<ondown>1201</ondown>
+				<align>center</align>
+				<label>Logout</label>
+				<onclick>ActivateWindow(14000)</onclick>
+			</control>
+        </control>
+		<control type="group">
+			<animation type="WindowOpen">
+				<effect type="fade" start="0" end="100" time="200" />
+			</animation>
+			<posx>20</posx>
+			<posy>200</posy>
+			<width>1200</width>
+			<height>500</height>
+			<colordiffuse>black</colordiffuse>
+<!--////////////////////////////////////////////////////////////////////
+						PRIMA COLONNA: MAIN MENU
+////////////////////////////////////////////////////////////////////-->
+			<control type="group">
+				<focusposition>1</focusposition>
+				<posx>10</posx>
+				<posy>0</posy>
+				<width>400</width>
+				<height>450</height>
+				<itemgap>0</itemgap>
+				<orientation>vertical</orientation>
+				<control type="image">
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>390</width>
+					<height>450</height>
+					<texture>black.png</texture>
+					<colordiffuse>CCF7F7F7</colordiffuse>
+				</control>
+				<control type="grouplist" id="1200">
+					<control type="button" id="1201"><!-- LIBRARY -->
+						<posx>5</posx>
+						<posy>5</posy>
+						<width>390</width>
+						<height>100</height>
+						<onup>SetFocus(1203)</onup>
+						<onright>SetFocus(1202)</onright>
+						<align>center</align>
+						<label>Library</label>
+						<!--<onclick lang="python"><![CDATA[
+import mc
+
+items = mc.GetDirectory('http://drivecast.eu/rss/rss.php?D=t=c9MGU3NQRhzVcoZ33ERLVj30aksGzkFLRuC1bRlmznVLWsQdDaQt0Y6BTYHxUO')
+mc.GetActiveWindow().GetList(1202).SetItems(items)
+						]]></onclick>-->
+					</control>
+				</control>
+			</control>
+<!--////////////////////////////////////////////////////////////////////
+						SECONDA COLONNA: PLAYLISTS
+////////////////////////////////////////////////////////////////////-->
+			<control type="group">
+				<posx>420</posx>
+				<posy>0</posy>
+				<width>400</width>
+				<height>450</height>
+				<align>center</align>
+				<ondown>-</ondown>
+				<control type="image">
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>390</width>
+					<height>450</height>
+					<texture>black.png</texture>
+					<colordiffuse>CCF7F7F7</colordiffuse>
+				</control>
+				<control type="panel" id="1202"><!-- ELENCO PODCAST -->
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>390</width>
+					<height>450</height>
+					<visible>true</visible>
+					<orientation>vertical</orientation>
+					<pagecontrol>25</pagecontrol>
+					<ondown>-</ondown>
+					<scrolltime>200</scrolltime>
+					<focusposition>2</focusposition>
+					<itemgap>5</itemgap>
+					<onup>SetFocus(1203)</onup>
+					<onleft>SetFocus(1200)</onleft>
+					<itemlayout width="337" height="28">
+						<posy>100</posy>
+						<posx>5</posx>
+						<width>390</width>
+						<height>100</height>
+						<control type="label">
+							<width>390</width>
+							<height>90</height>
+							<align>center</align>
+							<label>$INFO[ListItem.Label]</label>
+						</control>
+					</itemlayout>
+					<focusedlayout width="337" height="28">
+						<posx>0</posx>
+						<posy>0</posy>
+						<width>390</width>
+						<height>90</height>
+						<control type="image">
+							<width>390</width>
+							<height>90</height>
+							<texture>white.png</texture>
+							<colordiffuse>CCF7F7F7</colordiffuse>
+						</control>
+						<control type="label">
+							<posx>50</posx>
+							<width>390</width>
+							<height>100</height>
+							<align>center</align>
+							<label>$INFO[ListItem.Label]</label>
+						</control>
+					</focusedlayout>
+					<content type="url" url="http://drivecast.eu/rss/rss.php?D=t=c9MGU3NQRhzVcoZ33ERLVj30aksGzkFLRuC1bRlmznVLWsQdDaQt0Y6BTYHxUO"></content>
+				</control>
+			</control>
+<!--////////////////////////////////////////////////////////////////////
+						TERZA COLONNA: DESCRIPTION
+////////////////////////////////////////////////////////////////////-->
+			<control type="group">
+				<posx>830</posx>
+				<posy>0</posy>
+				<width>400</width>
+				<height>450</height>
+				<align>center</align>
+				<control type="image">
+					<posx>0</posx>
+					<posy>0</posy>
+					<width>390</width>
+					<height>450</height>
+					<texture>black.png</texture>
+					<colordiffuse>CCF7F7F7</colordiffuse>
+				</control>
+				<control type="label"><!-- LIBRARY DESC -->
+					<visible>Control.HasFocus(1201)</visible>
+					<posx>5</posx>
+					<posy>5</posy>
+					<width>390</width>
+					<height>100</height>
+					<label>Elenco completo podcast</label>
+				</control>
+				<control type="label"><!-- PODCAST DESC -->
+					<visible>Control.HasFocus(1202)</visible>
+					<posx>5</posx>
+					<posy>5</posy>
+					<width>390</width>
+					<height>100</height>
+					<label>$INFO[ListItem.Label]</label>
+				</control>
+			</control>
+		</control>
+		<content type="action">
+			
+		</content>
+	</controls>
+</window>
+
+
+
+
+
+
+
+						<!--<onclick lang="python"><![CDATA[
+list = mc.GetActiveWindow().GetList(1202)
+item = list.GetItem(list.GetFocusedItem())
+title = item.GetLabel()
+confirm = mc.ShowDialogConfirm('Boxee Basic Python Application', 'Would you like to play "'+title+'"?', 'Cancel', 'Play')
+if confirm:
+   mc.GetPlayer().Play(item)
+   counter.play_count += 1
+else:
+   counter.declined_count += 1
+counter.updateLabel()
+						]]></onclick>-->
