@@ -1,41 +1,108 @@
 <?xml version="1.0"?>
-<window type="window" id="14000">
-	<defaultcontrol always="true">25</defaultcontrol>
+<window type="window" id="14000"><!--  -->
+	<defaultcontrol always="true">1100</defaultcontrol>
 	<allowoverlay>no</allowoverlay>
-	<onload lang="python"><![CDATA[
-	]]></onload>
 	<controls>
 		<include>Common_Background</include>
 		<include>Common_Status</include>
-		<control type="group">
-			<control type="label">
-				<include>BrowseMainTitle</include>
-				<label>[COLOR red]DriveCast[/COLOR]</label>
-			</control>
-			<control type="label" id="110">
-				<include>BrowseSubTitle</include>
-				<posx>320</posx>
-				<label>[UPPERCASE]beta[/UPPERCASE]</label>
-			</control>
-		</control>
-		<control type="list" id="100">
-			<posx>200</posx>
-			<posy>50</posy>
-			<width>800</width>
-			<height>100</height>
+		<control type="group"><!-- BACKGROUND -->
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1280</width>
+                <height>720</height>
+                <texture>bg.png</texture>
+            </control>
+        </control>
+        <control type="image">
+			<posx>160</posx>
+			<posy>190</posy>
+			<width>980</width>
+			<height>520</height>
+			<texture>black.png</texture>
+			<colordiffuse>CCF7F7F7</colordiffuse>
+        </control>
+		<control type="grouplist" id="1100"><!-- LOGIN MENU -->
+			<focusposition>2</focusposition>
+			<posx>170</posx>
+			<posy>200</posy>
+			<width>940</width>
+			<height>500</height>
+			<itemgap>0</itemgap>
+			<onright>-</onright>
 			<orientation>horizontal</orientation>
-			<itemlayout width="200" height="100">
-				<control type="label">
-					<posx>0</posx>
-					<posy>0</posy>
-					<width>200</width>
-					<height>100</height>
-					<align>left</align>
-					<aligny>center</aligny>
-					<label>CACCA</label>
-					<textcolor>white</textcolor>
-				</control>
-			</itemlayout>
+			<colordiffuse>FFFF00FF</colordiffuse>
+			<control type="button" id="1101"><!-- LOGIN -->
+				<posx>10</posx>
+				<posy>50</posy>
+				<width>300</width>
+				<height>400</height>
+				<onleft>-</onleft>
+				<onright>1001</onright>
+				<label>Login</label>
+				<textcolor>grey</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<texturenofocus>-</texturenofocus>
+				<!--<texturefocus>select.png</texturefocus>-->
+				<font>font26</font>
+				<align>center</align>
+				<aligny>center</aligny>
+<!--
+				<onclick lang="python"><![CDATA[
+import mc
+
+items = mc.GetDirectory("http://drivecast.eu/rss/rss.php?D=t=c9MGU3NQRhzVcoZ33ERLVj30aksGzkFLRuC1bRlmznVLWsQdDaQt0Y6BTYHxUO?fmt=xml")
+mc.GetActiveWindow(15000).GetList(1202).SetItems(items)
+				]]>
+				</onclick>
+-->
+				<onclick>ActivateWindow(15000)</onclick>
+			</control>
+			<control type="button" id="1102"><!-- QRCODE -->
+				<posx>320</posx>
+				<posy>50</posy>
+				<width>300</width>
+				<height>400</height>
+				<onleft>1000</onleft>
+				<onright>1002</onright>
+				<onup>6001</onup>
+				<ondown>52</ondown>
+				<label>QRCode</label>
+				<textcolor>grey</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<texturenofocus>-</texturenofocus>
+				<!--<texturefocus>select.png</texturefocus>-->
+				<font>font26</font>
+				<align>center</align>
+				<aligny>center</aligny>
+				<onclick lang="python"><![CDATA[
+import drivecast,mc
+result = drivecast.log()
+if result:
+	mc.ShowDialogNotification("You are now authenticated!")
+	mc.GetApp.ActivateWindow(15000,"")
+]]>
+				</onclick>
+				<!--<onclick>Control.SetLabel(110,Featured)</onclick>
+				<onclick>Container.SetPath(52,rss://dir.boxee.tv/apps/youtube/recently_featured)</onclick>-->
+			</control>
+			<control type="button" id="1103"><!-- GUEST -->
+				<posx>630</posx>
+				<posy>50</posy>
+				<width>300</width>
+				<height>400</height>
+				<onleft>1001</onleft>
+				<label>Guest User</label>
+				<textcolor>grey</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<texturenofocus>-</texturenofocus>
+				<!--<texturefocus>select.png</texturefocus>-->
+				<font>font26</font>
+				<align>center</align>
+				<aligny>center</aligny>
+				<!--<onclick>Control.SetLabel(110,Featured)</onclick>
+				<onclick>Container.SetPath(52,rss://dir.boxee.tv/apps/youtube/recently_featured)</onclick>-->
+			</control>
 		</control>
 	</controls>
 </window>
