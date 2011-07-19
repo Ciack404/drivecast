@@ -1,205 +1,384 @@
 <?xml version="1.0"?>
-<window type="window" id="15000"><!--  -->
-	<defaultcontrol always="true">1200</defaultcontrol>
+<window type="window" id="15000">
+	<defaultcontrol always="true">9000</defaultcontrol>
 	<allowoverlay>no</allowoverlay>
-	<onload lang="python"><![CDATA[
-#import drivecast, mc
+	<onload lang="python">
+<![CDATA[
+import mc, drivecast
 
-#playlists = read_RSS(read_resource("AUTENTICAZIONE", "playlist"))
-#rss = read_RSS(read_resource("AUTENTICAZIONE", "feed"))
+mc.ShowDialogWait()
+conf= mc.GetApp().GetLocalConfig()
+win= mc.GetActiveWindow()
+lab= win.GetLabel(1205)
+if conf.GetValue("up"):
+	lab.SetLabel(conf.GetValue("username"))
+	drivecast.manage_RSS()
+else:
+	lab.SetLabel("Guest")
+	drivecast.guest()
 
-	]]></onload>
+
+
+conf.Reset("qr")
+pl= conf.GetValue("pl")
+#it= conf.GetValue("it")
+if mc.GetPlayer().IsPlaying():
+	win.GetList(9000).SetFocusedItem(int(pl))
+#	win.GetList(1202).SetFocusedItem(int(it))
+else:
+	win.GetList(9000).SetFocusedItem(0)
+#	win.GetList(1202).SetFocusedItem(0)
+
+
+
+mc.HideDialogWait()
+]]>
+	</onload>
+	<onunload lang="python">
+<![CDATA[
+conf= mc.GetApp().GetLocalConfig()
+win= mc.GetActiveWindow()
+if !(mc.GetPlayer().IsPlaying()):
+	conf.SetValue("pl",0)
+#	conf.SetValue("it",0)
+win.ClearStateStack(False)
+]]>
+	</onunload>
+	<previouswindow>10482</previouswindow>
 	<controls>
-		<include>Common_Background</include>
-		<include>Common_Status</include>
+		<control type="list" id="1200"><!-- LISTA INVISIBILE -->
+			<itemlayout></itemlayout>
+			<focusedlayout></focusedlayout>
+		</control>
 		<control type="group"><!-- BACKGROUND -->
 			<control type="image">
-                <posx>0</posx>
-                <posy>0</posy>
                 <width>1280</width>
                 <height>720</height>
-                <texture>bg2.png</texture>
+                <texture>background.png</texture>
             </control>
-			<control type="button" id="1203"><!-- LOGOUT -->
-				<posx>1100</posx>
-				<posy>20</posy>
-				<width>100</width>
-				<height>40</height>
-				<ondown>1201</ondown>
-				<align>center</align>
-				<label>Logout</label>
-				<onclick>ActivateWindow(14000)</onclick>
-			</control>
-        </control>
-		<control type="group">
-			<animation type="WindowOpen">
-				<effect type="fade" start="0" end="100" time="200" />
-			</animation>
-			<posx>20</posx>
-			<posy>200</posy>
-			<width>1200</width>
-			<height>500</height>
-			<colordiffuse>black</colordiffuse>
+            <include>Common_Status</include>
+			<control type="group"><!-- BODY CENTRALE-->
+				<posx>20</posx>
+				<posy>154</posy>
+				<width>1240</width>
+				<height>500</height>
 <!--////////////////////////////////////////////////////////////////////
 						PRIMA COLONNA: MAIN MENU
 ////////////////////////////////////////////////////////////////////-->
-			<control type="group">
-				<focusposition>1</focusposition>
-				<posx>10</posx>
-				<posy>0</posy>
-				<width>400</width>
-				<height>450</height>
-				<itemgap>0</itemgap>
-				<orientation>vertical</orientation>
-				<control type="image">
-					<posx>0</posx>
-					<posy>0</posy>
-					<width>390</width>
-					<height>450</height>
-					<texture>black.png</texture>
-					<colordiffuse>CCF7F7F7</colordiffuse>
-				</control>
-				<control type="grouplist" id="1200">
-					<control type="button" id="1201"><!-- LIBRARY -->
-						<posx>5</posx>
-						<posy>5</posy>
-						<width>390</width>
-						<height>100</height>
-						<onup>SetFocus(1203)</onup>
-						<onright>SetFocus(1202)</onright>
-						<align>center</align>
-						<label>Library</label>
-						<!--<onclick lang="python"><![CDATA[
-import mc
-
-items = mc.GetDirectory('http://drivecast.eu/rss/rss.php?D=t=c9MGU3NQRhzVcoZ33ERLVj30aksGzkFLRuC1bRlmznVLWsQdDaQt0Y6BTYHxUO')
-mc.GetActiveWindow().GetList(1202).SetItems(items)
-						]]></onclick>-->
+				<control type="group">
+					<width>400</width>
+					<height>480</height>
+					<control type="image">
+						<width>400</width>
+						<height>480</height>
+						<texture>list_background.png</texture>
+					</control>
+					<control type="fixedlist" id="9000">
+						<width>400</width>
+						<height>480</height>
+						<visible>true</visible>
+						<orientation>vertical</orientation>
+						<onup>6000</onup>
+						<onright>1202</onright>
+						<onleft>-</onleft>
+						<ondown>1204</ondown>
+						<focusposition>0</focusposition>
+						<itemlayout height="80">
+							<control type="image">
+								<height>80</height>
+								<width>400</width>
+								<texture>item_background.png</texture>
+							</control>
+							<control type="label">
+								<posx>70</posx>
+								<width>316</width>
+								<height>80</height>
+								<aligny>center</aligny>
+								<label>$INFO[ListItem.Label]</label>
+							</control>
+							<control type="image">
+								<posy>20</posy>
+								<posx>14</posx>
+								<width>42</width>
+								<height>42</height>
+								<texture>$INFO[ListItem.Thumb]</texture>
+							</control>
+						</itemlayout>
+						<focusedlayout height="80">
+							<control type="image">
+								<width>400</width>
+								<height>80</height>
+								<texture>bg_focus.png</texture>
+							</control>
+							<control type="image">
+								<visible>Control.HasFocus(9000)</visible>
+								<width>400</width>
+								<height>80</height>
+								<texture>box_focused.png</texture>
+							</control>
+							<control type="button">
+								<width>400</width>
+								<height>80</height>
+								<texturefocus>box_focused.png</texturefocus>
+								<onfocus lang="python">
+<![CDATA[
+mc.ShowDialogWait()
+wind = mc.GetActiveWindow()
+elenco = wind.GetList(1200).GetItems()
+listaIN = wind.GetList(9000)
+sel = listaIN.GetItem(listaIN.GetFocusedItem())
+playlist = sel.GetProperty("pl")
+lista = mc.ListItems()
+for item in elenco:
+	item_playlist = item.GetProperty("pl")
+	pl=str(item_playlist)
+	if(pl==playlist or pl.endswith(","+playlist) or pl.startswith(playlist+",") or pl.find(","+playlist+",")!=-1 or playlist==""):
+		lista.append(item)
+listaOUT = wind.GetList(1202)
+listaOUT.SetItems(lista)
+listaOUT.SetVisible(True)
+mc.HideDialogWait()
+]]>
+								</onfocus>
+							</control>
+							<control type="image">
+								<width>63</width>
+								<height>63</height>
+								<posy>9</posy>
+								<posx>4</posx>
+								<texture>$INFO[ListItem.Thumb]</texture>
+							</control>
+							<control type="label">
+								<width>306</width>
+								<height>80</height>
+								<posx>80</posx>
+								<aligny>center</aligny>
+								<scroll>true</scroll>
+								<font>font24b</font>
+								<label>$INFO[ListItem.Label]</label>
+							</control>
+						</focusedlayout>
+						<content type="action">
+							<onclick lang="python">
+<![CDATA[
+if mc.ShowDialogConfirm('Playlist', 'Play whole playlist?', 'No', 'Yes'):
+	listaIN = mc.GetActiveWindow().GetList(1202).GetItems()
+	if mc.GetPlayer().IsPlaying():
+		mc.GetPlayer().Stop()
+	playlist = mc.PlayList(mc.PlayList.PLAYLIST_VIDEO)
+	playlist.Clear()
+	for sel in listaIN:
+		playlist.Add(sel)
+	conf= mc.GetApp().GetLocalConfig()
+	win= mc.GetActiveWindow()
+	conf.SetValue("pl",str(win.GetList(9000).GetFocusedItem()))
+	#conf.SetValue("it",0)
+	playlist.Play(0)
+]]>
+							</onclick>
+						</content>
 					</control>
 				</control>
-			</control>
+
 <!--////////////////////////////////////////////////////////////////////
 						SECONDA COLONNA: PLAYLISTS
 ////////////////////////////////////////////////////////////////////-->
-			<control type="group">
-				<posx>420</posx>
-				<posy>0</posy>
-				<width>400</width>
-				<height>450</height>
-				<align>center</align>
-				<ondown>-</ondown>
-				<control type="image">
-					<posx>0</posx>
-					<posy>0</posy>
-					<width>390</width>
-					<height>450</height>
-					<texture>black.png</texture>
-					<colordiffuse>CCF7F7F7</colordiffuse>
+				<control type="group">
+					<posx>420</posx>
+					<width>400</width>
+					<height>480</height>
+					<control type="image">
+						<width>400</width>
+						<height>480</height>
+						<texture>list_background.png</texture>
+					</control>
+					<control type="fixedlist" id="1202"><!-- ELENCO PODCAST -->
+						<width>400</width>
+						<height>480</height>
+						<visible>true</visible>
+						<orientation>vertical</orientation>
+						<ondown>1204</ondown>
+						<onup>6000</onup>
+						<onleft>9000</onleft>
+						<onright>6000</onright>
+						<focusposition>0</focusposition>
+						<itemlayout height="80">
+							<control type="image">
+								<height>80</height>
+								<width>400</width>
+								<texture>item_background.png</texture>
+							</control>
+							<control type="label">
+								<posx>70</posx>
+								<width>316</width>
+								<height>80</height>
+								<aligny>center</aligny>
+								<label>$INFO[ListItem.Label]</label>
+							</control>
+							<control type="image">
+								<posy>20</posy>
+								<posx>14</posx>
+								<width>42</width>
+								<height>42</height>
+								<texture>$INFO[ListItem.Genre]</texture>
+							</control>
+						</itemlayout>
+						<focusedlayout height="80">
+							<control type="image">
+								<width>400</width>
+								<height>80</height>
+								<texture>bg_focus.png</texture>
+							</control>
+							<control type="image">
+								<visible>Control.HasFocus(1202)</visible>
+								<width>400</width>
+								<height>80</height>
+								<texture>box_focused.png</texture>
+							</control>
+							<control type="button">
+								<width>400</width>
+								<height>80</height>
+								<texturefocus>box_focused.png</texturefocus>
+							</control>
+							<control type="image">
+								<width>63</width>
+								<height>63</height>
+								<posy>9</posy>
+								<posx>4</posx>
+								<texture>$INFO[ListItem.Genre]</texture>
+							</control>
+							<control type="label">
+								<width>306</width>
+								<height>80</height>
+								<posx>80</posx>
+								<aligny>center</aligny>
+								<scroll>true</scroll>
+								<font>font24b</font>
+								<label>$INFO[ListItem.Label]</label>
+							</control>
+						</focusedlayout>
+						<content type="action">
+							<onclick lang="python">
+<![CDATA[
+if mc.GetPlayer().IsPlaying():
+	mc.GetPlayer().Stop()
+listaIN = mc.GetActiveWindow().GetList(1202)
+sel = listaIN.GetItem(listaIN.GetFocusedItem())
+conf= mc.GetApp().GetLocalConfig()
+win= mc.GetActiveWindow()
+conf.SetValue("pl",str(win.GetList(9000).GetFocusedItem()))
+#conf.SetValue("it",str(win.GetList(1202).GetFocusedItem()))
+mc.GetPlayer().PlayWithActionMenu(sel)
+]]>
+							</onclick>
+						</content>
+					</control>
 				</control>
-				<control type="panel" id="1202"><!-- ELENCO PODCAST -->
-					<posx>0</posx>
-					<posy>0</posy>
-					<width>390</width>
-					<height>450</height>
-					<visible>true</visible>
-					<orientation>vertical</orientation>
-					<pagecontrol>25</pagecontrol>
-					<ondown>-</ondown>
-					<scrolltime>200</scrolltime>
-					<focusposition>2</focusposition>
-					<itemgap>5</itemgap>
-					<onup>SetFocus(1203)</onup>
-					<onleft>SetFocus(1200)</onleft>
-					<itemlayout width="337" height="28">
-						<posy>100</posy>
-						<posx>5</posx>
-						<width>390</width>
-						<height>100</height>
-						<control type="label">
-							<width>390</width>
-							<height>90</height>
-							<align>center</align>
-							<label>$INFO[ListItem.Label]</label>
-						</control>
-					</itemlayout>
-					<focusedlayout width="337" height="28">
-						<posx>0</posx>
-						<posy>0</posy>
-						<width>390</width>
-						<height>90</height>
-						<control type="image">
-							<width>390</width>
-							<height>90</height>
-							<texture>white.png</texture>
-							<colordiffuse>CCF7F7F7</colordiffuse>
-						</control>
-						<control type="label">
-							<posx>50</posx>
-							<width>390</width>
-							<height>100</height>
-							<align>center</align>
-							<label>$INFO[ListItem.Label]</label>
-						</control>
-					</focusedlayout>
-					<content type="url" url="http://drivecast.eu/rss/rss.php?D=t=c9MGU3NQRhzVcoZ33ERLVj30aksGzkFLRuC1bRlmznVLWsQdDaQt0Y6BTYHxUO"></content>
-				</control>
-			</control>
 <!--////////////////////////////////////////////////////////////////////
 						TERZA COLONNA: DESCRIPTION
 ////////////////////////////////////////////////////////////////////-->
-			<control type="group">
-				<posx>830</posx>
-				<posy>0</posy>
-				<width>400</width>
-				<height>450</height>
-				<align>center</align>
-				<control type="image">
-					<posx>0</posx>
-					<posy>0</posy>
-					<width>390</width>
-					<height>450</height>
-					<texture>black.png</texture>
-					<colordiffuse>CCF7F7F7</colordiffuse>
-				</control>
-				<control type="label"><!-- LIBRARY DESC -->
-					<visible>Control.HasFocus(1201)</visible>
-					<posx>5</posx>
-					<posy>5</posy>
-					<width>390</width>
-					<height>100</height>
-					<label>Elenco completo podcast</label>
-				</control>
-				<control type="label"><!-- PODCAST DESC -->
-					<visible>Control.HasFocus(1202)</visible>
-					<posx>5</posx>
-					<posy>5</posy>
-					<width>390</width>
-					<height>100</height>
-					<label>$INFO[ListItem.Label]</label>
+				<control type="group">
+					<posx>840</posx>
+					<width>400</width>
+					<height>480</height>
+					<control type="image">
+						<width>400</width>
+						<height>480</height>
+						<texture>list_background.png</texture>
+					</control>
+					<control type="label"><!-- PODCAST TITLE-->
+						<visible>true</visible>
+						<posx>5</posx>
+						<posy>20</posy>
+						<width>380</width>
+						<height>100</height>
+						<align>center</align>
+						<font>light28b</font>
+						<scroll>true</scroll>
+						<info>Container(1202).ListItem.label</info>
+					</control>
+					<control type="label"><!-- PODCAST AUTHOR-->
+						<visible>true</visible>
+						<posy>70</posy>
+						<width>390</width>
+						<height>100</height>
+						<align>center</align>
+						<scroll>true</scroll>
+						<info>Container(1202).ListItem.artist</info>
+					</control>
+					<control type="image"><!-- THUMBNAIL -->
+						<posx>80</posx>
+						<posy>100</posy>
+						<height>240</height>
+						<width>240</width>
+						<info>Container(1202).ListItem.thumb</info>
+					</control>
 				</control>
 			</control>
+			<include>BrowseEmptyList</include>
+			<control type="image">
+				<posy>674</posy>
+				<height>46</height>
+				<width>1280</width>
+				<texture>toolbar_background.png</texture>
+			</control>
+			<control type="button" id="1203"><!-- LOGOUT -->
+				<posx>915</posx>
+				<posy>675</posy>
+				<width>100</width>
+				<height>45</height>
+				<onup>9000</onup>
+				<ondown>-</ondown>
+				<onright>-</onright>
+				<onleft>1204</onleft>
+				<align>center</align>
+				<aligny>center</aligny>
+				<texturefocus>box_focused.png</texturefocus>
+				<label>Logout</label>
+				<textcolor>white</textcolor>
+				<onclick lang="python">
+<![CDATA[
+if mc.ShowDialogConfirm('Logout', 'Vuoi effettuare il logout?', 'No', 'Yes'):
+	mc.GetApp().GetLocalConfig().ResetAll()
+	mc.GetActiveWindow().ClearStateStack(True)
+	if mc.GetPlayer().IsPlaying():
+		mc.GetPlayer().Stop()
+	mc.ActivateWindow(14000)
+]]>
+				</onclick>
+			</control>
+			<control type="button" id="1204"><!-- REFRESH -->
+				<posx>40</posx>
+				<posy>675</posy>
+				<width>100</width>
+				<height>45</height>
+				<onup>9000</onup>
+				<ondown>-</ondown>
+				<onright>1203</onright>
+				<onleft>9000</onleft>
+				<align>center</align>
+				<aligny>center</aligny>
+				<label>Refresh</label>
+				<textcolor>white</textcolor>
+				<texturefocus>box_focused.png</texturefocus>
+				<onclick lang="python">
+<![CDATA[
+if mc.GetPlayer().IsPlaying():
+	mc.GetPlayer().Stop()
+mc.ActivateWindow(15000)
+]]>
+				</onclick>
+			</control>
+			<control type="label" id="1205"><!-- USERNAME -->
+				<posx>1100</posx>
+				<posy>675</posy>
+				<width>300</width>
+				<height>45</height>
+				<font>font28b</font>
+				<aligny>rigth</aligny>
+				<textcolor>white</textcolor>
+			</control>
 		</control>
-		<content type="action">
-			
-		</content>
+		<include>Common_Now_Playing</include>
 	</controls>
 </window>
-
-
-
-
-
-
-
-						<!--<onclick lang="python"><![CDATA[
-list = mc.GetActiveWindow().GetList(1202)
-item = list.GetItem(list.GetFocusedItem())
-title = item.GetLabel()
-confirm = mc.ShowDialogConfirm('Boxee Basic Python Application', 'Would you like to play "'+title+'"?', 'Cancel', 'Play')
-if confirm:
-   mc.GetPlayer().Play(item)
-   counter.play_count += 1
-else:
-   counter.declined_count += 1
-counter.updateLabel()
-						]]></onclick>-->

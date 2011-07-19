@@ -1,107 +1,176 @@
 <?xml version="1.0"?>
-<window type="window" id="14000"><!--  -->
-	<defaultcontrol always="true">1100</defaultcontrol>
+<window type="window" id="14000">
+	<defaultcontrol always="true">1103</defaultcontrol>
 	<allowoverlay>no</allowoverlay>
-	<controls>
-		<include>Common_Background</include>
-		<include>Common_Status</include>
-		<control type="group"><!-- BACKGROUND -->
-            <control type="image">
-                <posx>0</posx>
-                <posy>0</posy>
-                <width>1280</width>
-                <height>720</height>
-                <texture>bg.png</texture>
-            </control>
-        </control>
-        <control type="image">
-			<posx>160</posx>
-			<posy>190</posy>
-			<width>980</width>
-			<height>520</height>
-			<texture>black.png</texture>
-			<colordiffuse>CCF7F7F7</colordiffuse>
-        </control>
-		<control type="grouplist" id="1100"><!-- LOGIN MENU -->
-			<focusposition>2</focusposition>
-			<posx>170</posx>
-			<posy>200</posy>
-			<width>940</width>
-			<height>500</height>
-			<itemgap>0</itemgap>
-			<onright>-</onright>
-			<orientation>horizontal</orientation>
-			<colordiffuse>FFFF00FF</colordiffuse>
-			<control type="button" id="1101"><!-- LOGIN -->
-				<posx>10</posx>
-				<posy>50</posy>
-				<width>300</width>
-				<height>400</height>
-				<onleft>-</onleft>
-				<onright>1001</onright>
-				<label>Login</label>
-				<textcolor>grey</textcolor>
-				<focusedcolor>white</focusedcolor>
-				<texturenofocus>-</texturenofocus>
-				<!--<texturefocus>select.png</texturefocus>-->
-				<font>font26</font>
-				<align>center</align>
-				<aligny>center</aligny>
-<!--
-				<onclick lang="python"><![CDATA[
-import mc
+	<onload lang="python">
+<![CDATA[
+import mc, drivecast, threading, urllib2
+from base64 import standard_b64encode
 
-items = mc.GetDirectory("http://drivecast.eu/rss/rss.php?D=t=c9MGU3NQRhzVcoZ33ERLVj30aksGzkFLRuC1bRlmznVLWsQdDaQt0Y6BTYHxUO?fmt=xml")
-mc.GetActiveWindow(15000).GetList(1202).SetItems(items)
-				]]>
-				</onclick>
--->
-				<onclick>ActivateWindow(15000)</onclick>
+mc.ShowDialogWait()
+drivecast.qrcode_post()
+mc.HideDialogWait()
+drivecast.qrcode_get().start()
+]]>
+	</onload>
+	<previouswindow>10482</previouswindow>
+	<controls>
+		<control type="group"><!-- BACKGROUND -->
+			<control type="image">
+				<posx>0</posx>
+				<posy>0</posy>
+				<width>1280</width>
+				<height>720</height>
+				<texture>background.png</texture>
 			</control>
-			<control type="button" id="1102"><!-- QRCODE -->
-				<posx>320</posx>
+			<include>Common_Status</include>
+		</control>
+<!--////////////////////////////////////////////////////////////////////
+						GUEST USER
+////////////////////////////////////////////////////////////////////-->
+		<control type="image">
+			<posx>20</posx>
+			<posy>200</posy>
+			<width>390</width>
+			<height>450</height>
+			<texture>black.png</texture>
+			<colordiffuse>grey</colordiffuse>
+		</control>
+		<control type="button" id="1103">
+			<posx>20</posx>
+			<posy>200</posy>
+			<width>390</width>
+			<height>450</height>
+			<onleft>-</onleft>
+			<onright>4001</onright>
+			<onup>-</onup>
+			<ondown>-</ondown>
+			<textcolor>grey</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<texturenofocus>-</texturenofocus>
+			<texturefocus>bg_focus.png</texturefocus>
+			<font>font26</font>
+			<align>center</align>
+			<aligny>center</aligny>
+			<onclick>ActivateWindow(15000)</onclick>
+		</control>
+		<control type="label">
+			<posx>40</posx>
+			<posy>240</posy>
+			<height>400</height>
+			<width>350</width>
+			<label>Premi ok per entrare come ospite e prova il widget con una selezione di contenuti audio e video HD</label>
+			<wrapmultiline>true</wrapmultiline>
+		</control>
+<!--////////////////////////////////////////////////////////////////////
+						LOGIN FORM
+////////////////////////////////////////////////////////////////////-->
+		<control type="group">
+			<visible>true</visible>
+			<focusposition>2</focusposition>
+			<posx>450</posx>
+			<posy>200</posy>
+			<control type="image">
+				<posx>0</posx>
+				<posy>0</posy>
+				<width>800</width>
+				<height>450</height>
+				<texture>black.png</texture>
+				<colordiffuse>grey</colordiffuse>
+			</control>
+			<control type="edit" id="4001">
+				<posx>30</posx>
 				<posy>50</posy>
 				<width>300</width>
-				<height>400</height>
-				<onleft>1000</onleft>
-				<onright>1002</onright>
-				<onup>6001</onup>
-				<ondown>52</ondown>
-				<label>QRCode</label>
+				<height>100</height>
+				<onup>-</onup>
+				<onleft>1103</onleft>
+				<onright>-</onright>
+				<ondown>4002</ondown>
+				<label>Username</label>
 				<textcolor>grey</textcolor>
 				<focusedcolor>white</focusedcolor>
-				<texturenofocus>-</texturenofocus>
-				<!--<texturefocus>select.png</texturefocus>-->
-				<font>font26</font>
+				<texturefocus>box_focused.png</texturefocus>
+				<textoffsetx>8</textoffsetx>
+			</control>
+			<control type="edit" id="4002">
+				<posx>30</posx>
+				<posy>150</posy>
+				<password>true</password>
+				<width>300</width>
+				<height>100</height>
+				<onright>-</onright>
+				<onleft>1103</onleft>
+				<onup>4001</onup>
+				<ondown>4003</ondown>
+				<label>Password</label>
+				<textcolor>grey</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<texturefocus>box_focused.png</texturefocus>
+				<textoffsetx>8</textoffsetx>
+			</control>
+			<control type="button" id="4003">
+				<posx>30</posx>
+				<posy>300</posy>
+				<width>300</width>
+				<height>100</height>
 				<align>center</align>
 				<aligny>center</aligny>
-				<onclick lang="python"><![CDATA[
-import drivecast,mc
-result = drivecast.log()
-if result:
-	mc.ShowDialogNotification("You are now authenticated!")
-	mc.GetApp.ActivateWindow(15000,"")
+				<onup>4002</onup>
+				<ondown>-</ondown>
+				<onright>-</onright>
+				<onleft>1103</onleft>
+				<texturefocus>box_focused.png</texturefocus>
+				<textcolor>grey</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<label>Ok</label>
+				<onclick lang="python">
+<![CDATA[
+mc.ShowDialogWait()
+us = mc.GetWindow(14000).GetEdit(4001).GetText()
+ps = mc.GetWindow(14000).GetEdit(4002).GetText()
+
+if us=="" or ps=="":
+	mc.HideDialogWait()
+	mc.ShowDialogOk("Error","Login failed")
+else:
+	try:
+		conf= mc.GetApp().GetLocalConfig()
+		up= standard_b64encode(us+':'+ps)	#AUTENTICAZIONE IN BASE64
+		conf.SetValue("up",up)
+		conf.SetValue("username",us)
+		drivecast.log()
+	except:
+		mc.HideDialogWait()
+		mc.ShowDialogOk("Error","Login failed")
 ]]>
 				</onclick>
-				<!--<onclick>Control.SetLabel(110,Featured)</onclick>
-				<onclick>Container.SetPath(52,rss://dir.boxee.tv/apps/youtube/recently_featured)</onclick>-->
 			</control>
-			<control type="button" id="1103"><!-- GUEST -->
-				<posx>630</posx>
-				<posy>50</posy>
+<!--////////////////////////////////////////////////////////////////////
+						QR CODE
+////////////////////////////////////////////////////////////////////-->
+			<control type="largeimage" id="2000">
+				<posx>480</posx>
+				<posy>250</posy>
+				<width>165</width>
+				<height>165</height>
+			</control>
+<!--////////////////////////////////////////////////////////////////////
+						PAIRING CODE
+////////////////////////////////////////////////////////////////////-->
+			<control type="label">
+				<posx>420</posx>
+				<posy>40</posy>
+				<width>350</width>
+				<height>150</height>
+				<label>Visita il sito http://drivecast.eu/pair sul tuo pc e inserisci questo codice per abbinare la tv al tuo account drivecast</label>
+				<wrapmultiline>true</wrapmultiline>
+			</control>
+			<control type="label" id="2001">
+				<posx>530</posx>
+				<posy>190</posy>
 				<width>300</width>
-				<height>400</height>
-				<onleft>1001</onleft>
-				<label>Guest User</label>
-				<textcolor>grey</textcolor>
-				<focusedcolor>white</focusedcolor>
-				<texturenofocus>-</texturenofocus>
-				<!--<texturefocus>select.png</texturefocus>-->
-				<font>font26</font>
-				<align>center</align>
-				<aligny>center</aligny>
-				<!--<onclick>Control.SetLabel(110,Featured)</onclick>
-				<onclick>Container.SetPath(52,rss://dir.boxee.tv/apps/youtube/recently_featured)</onclick>-->
+				<font>font28b</font>
 			</control>
 		</control>
 	</controls>
