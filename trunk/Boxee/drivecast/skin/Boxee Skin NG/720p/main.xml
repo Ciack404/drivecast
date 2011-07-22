@@ -137,9 +137,8 @@ else:
 	try:
 		conf= mc.GetApp().GetLocalConfig()
 		up= standard_b64encode(us+':'+ps)	#AUTENTICAZIONE IN BASE64
-		conf.SetValue("up",up)
 		conf.SetValue("username",us)
-		drivecast.log()
+		drivecast.log(up)
 	except:
 		mc.HideDialogWait()
 		mc.ShowDialogOk("Error","Login failed")

@@ -13,14 +13,12 @@ __api_version__ = 'api/2.0/'
 __api_key__ = "QXz8eEdSeKDoBvg4CzX4gU3n6MnliMZ9"
 __device__ = "&name=Boxee&dev_type=boxee"
 
-def log():
+def log(up):
 	config = mc.GetApp().GetLocalConfig()
-	up = config.GetValue("up")	#base64 of username:password
 	rssURL= read_resource(up, "feed")
-	rssSRC = str(rssURL["feedURL"])
-	config.SetValue("rss",rssSRC)
+	config.SetValue("rss",str(rssURL["feedURL"]))
 	mc.HideDialogWait()
-	mc.GetWindow(15000).ClearStateStack(False)
+	config.Reset("up")
 	mc.ActivateWindow(15000)
 
 #========================================================================================
@@ -58,7 +56,7 @@ def read_RSS(feed):
 		print " ---RSS URL ERROR--- : " + str(e.reason)
 
 #========================================================================================
-#	LISTA PODCAST																<<<OK>>>>
+#	LISTA INVISIBILE																<<<OK>>>>
 #========================================================================================
 
 def manage_RSS():
@@ -141,7 +139,8 @@ def qrcode_post():
 
 class qrcode_get(threading.Thread):
 	def run(self):
-		qr= mc.GetApp().GetLocalConfig().GetValue("qr")
+		conf= mc.GetApp().GetLocalConfig()
+		qr= conf.GetValue("qr")
 		request = ""
 		while request!="OK":
 			try:
@@ -153,13 +152,11 @@ class qrcode_get(threading.Thread):
 		if request == "OK":
 			get= read_resource("","pair/AppleTV/AppleTV/AppleTV/"+qr)
 			if get["statuscode"]!=404:
-				mc.ShowDialogWait()
 				up= str(get["Authorization"])
 				us = standard_b64decode(up).split(":")[0]
 				mc.GetApp().GetLocalConfig().SetValue("username",us)
-				mc.GetApp().GetLocalConfig().SetValue("up",up)
-				log()
-				mc.HideDialogWait()
+				conf.Reset("qr")
+				log(str(get["Authorization"]))
 
 #========================================================================================
 #	GUEST USER																	<<<OK>>>>
