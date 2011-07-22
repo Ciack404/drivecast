@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <window type="window" id="15000">
-	<defaultcontrol always="true">9000</defaultcontrol>
+	<defaultcontrol always="true">9001</defaultcontrol>
 	<allowoverlay>no</allowoverlay>
+	<!--<onload>Container.Refresh()</onload>-->
 	<onload lang="python">
 <![CDATA[
 import mc, drivecast
@@ -9,41 +10,18 @@ import mc, drivecast
 mc.ShowDialogWait()
 conf= mc.GetApp().GetLocalConfig()
 win= mc.GetActiveWindow()
+win.ClearStateStack(False)
 lab= win.GetLabel(1205)
-if conf.GetValue("up"):
-	lab.SetLabel(conf.GetValue("username"))
+us= conf.GetValue("username")
+if us:
+	lab.SetLabel(us)
 	drivecast.manage_RSS()
 else:
 	lab.SetLabel("Guest")
 	drivecast.guest()
-
-
-
-conf.Reset("qr")
-pl= conf.GetValue("pl")
-#it= conf.GetValue("it")
-if mc.GetPlayer().IsPlaying():
-	win.GetList(9000).SetFocusedItem(int(pl))
-#	win.GetList(1202).SetFocusedItem(int(it))
-else:
-	win.GetList(9000).SetFocusedItem(0)
-#	win.GetList(1202).SetFocusedItem(0)
-
-
-
 mc.HideDialogWait()
 ]]>
 	</onload>
-	<onunload lang="python">
-<![CDATA[
-conf= mc.GetApp().GetLocalConfig()
-win= mc.GetActiveWindow()
-if !(mc.GetPlayer().IsPlaying()):
-	conf.SetValue("pl",0)
-#	conf.SetValue("it",0)
-win.ClearStateStack(False)
-]]>
-	</onunload>
 	<previouswindow>10482</previouswindow>
 	<controls>
 		<control type="list" id="1200"><!-- LISTA INVISIBILE -->
@@ -62,65 +40,71 @@ win.ClearStateStack(False)
 				<posy>154</posy>
 				<width>1240</width>
 				<height>500</height>
+				<control type="group" id="9001">
 <!--////////////////////////////////////////////////////////////////////
 						PRIMA COLONNA: MAIN MENU
 ////////////////////////////////////////////////////////////////////-->
-				<control type="group">
-					<width>400</width>
-					<height>480</height>
-					<control type="image">
+					<control type="group">
 						<width>400</width>
 						<height>480</height>
-						<texture>list_background.png</texture>
-					</control>
-					<control type="fixedlist" id="9000">
-						<width>400</width>
-						<height>480</height>
-						<visible>true</visible>
-						<orientation>vertical</orientation>
-						<onup>6000</onup>
-						<onright>1202</onright>
-						<onleft>-</onleft>
-						<ondown>1204</ondown>
-						<focusposition>0</focusposition>
-						<itemlayout height="80">
-							<control type="image">
-								<height>80</height>
-								<width>400</width>
-								<texture>item_background.png</texture>
-							</control>
-							<control type="label">
-								<posx>70</posx>
-								<width>316</width>
-								<height>80</height>
-								<aligny>center</aligny>
-								<label>$INFO[ListItem.Label]</label>
-							</control>
-							<control type="image">
-								<posy>20</posy>
-								<posx>14</posx>
-								<width>42</width>
-								<height>42</height>
-								<texture>$INFO[ListItem.Thumb]</texture>
-							</control>
-						</itemlayout>
-						<focusedlayout height="80">
-							<control type="image">
-								<width>400</width>
-								<height>80</height>
-								<texture>bg_focus.png</texture>
-							</control>
-							<control type="image">
-								<visible>Control.HasFocus(9000)</visible>
-								<width>400</width>
-								<height>80</height>
-								<texture>box_focused.png</texture>
-							</control>
-							<control type="button">
-								<width>400</width>
-								<height>80</height>
-								<texturefocus>box_focused.png</texturefocus>
-								<onfocus lang="python">
+						<control type="image">
+							<width>400</width>
+							<height>480</height>
+							<texture>list_background.png</texture>
+						</control>
+						<control type="fixedlist" id="9000">
+							<width>400</width>
+							<height>480</height>
+							<visible>true</visible>
+							<orientation>vertical</orientation>
+							<onup>6000</onup>
+							<onright>1202</onright>
+							<onleft>-</onleft>
+							<ondown>1204</ondown>
+							<focusposition>0</focusposition>
+							<itemlayout height="96">
+								<control type="image">
+									<height>96</height>
+									<width>400</width>
+									<texture>item_background.png</texture>
+								</control>
+								<control type="label">
+									<posx>67</posx>
+									<width>318</width>
+									<height>96</height>
+									<aligny>center</aligny>
+									<label>$INFO[ListItem.Label]</label>
+								</control>
+								<control type="image">
+									<posy>28</posy>
+									<posx>15</posx>
+									<width>42</width>
+									<height>42</height>
+									<texture>$INFO[ListItem.Thumb]</texture>
+								</control>
+							</itemlayout>
+							<focusedlayout height="96">
+								<control type="image">
+									<height>96</height>
+									<width>400</width>
+									<texture>item_background.png</texture>
+								</control>
+								<control type="image">
+									<width>400</width>
+									<height>96</height>
+									<texture>item_selected.png</texture>
+								</control>
+								<control type="image">
+									<visible>Control.HasFocus(9000)</visible>
+									<width>400</width>
+									<height>96</height>
+									<texture>box_focused.png</texture>
+								</control>
+								<control type="button">
+									<width>400</width>
+									<height>96</height>
+									<texturefocus>box_focused.png</texturefocus>
+									<onfocus lang="python">
 <![CDATA[
 mc.ShowDialogWait()
 wind = mc.GetActiveWindow()
@@ -139,27 +123,27 @@ listaOUT.SetItems(lista)
 listaOUT.SetVisible(True)
 mc.HideDialogWait()
 ]]>
-								</onfocus>
-							</control>
-							<control type="image">
-								<width>63</width>
-								<height>63</height>
-								<posy>9</posy>
-								<posx>4</posx>
-								<texture>$INFO[ListItem.Thumb]</texture>
-							</control>
-							<control type="label">
-								<width>306</width>
-								<height>80</height>
-								<posx>80</posx>
-								<aligny>center</aligny>
-								<scroll>true</scroll>
-								<font>font24b</font>
-								<label>$INFO[ListItem.Label]</label>
-							</control>
-						</focusedlayout>
-						<content type="action">
-							<onclick lang="python">
+									</onfocus>
+								</control>
+								<control type="image">
+									<width>63</width>
+									<height>63</height>
+									<posy>17</posy>
+									<posx>15</posx>
+									<texture>$INFO[ListItem.Thumb]</texture>
+								</control>
+								<control type="label">
+									<width>297</width>
+									<height>96</height>
+									<posx>88</posx>
+									<aligny>center</aligny>
+									<scroll>true</scroll>
+									<font>font24b</font>
+									<label>$INFO[ListItem.Label]</label>
+								</control>
+							</focusedlayout>
+							<content type="action">
+								<onclick lang="python">
 <![CDATA[
 if mc.ShowDialogConfirm('Playlist', 'Play whole playlist?', 'No', 'Yes'):
 	listaIN = mc.GetActiveWindow().GetList(1202).GetItems()
@@ -169,109 +153,107 @@ if mc.ShowDialogConfirm('Playlist', 'Play whole playlist?', 'No', 'Yes'):
 	playlist.Clear()
 	for sel in listaIN:
 		playlist.Add(sel)
-	conf= mc.GetApp().GetLocalConfig()
-	win= mc.GetActiveWindow()
-	conf.SetValue("pl",str(win.GetList(9000).GetFocusedItem()))
-	#conf.SetValue("it",0)
 	playlist.Play(0)
 ]]>
-							</onclick>
-						</content>
+								</onclick>
+							</content>
+						</control>
 					</control>
-				</control>
 
 <!--////////////////////////////////////////////////////////////////////
 						SECONDA COLONNA: PLAYLISTS
 ////////////////////////////////////////////////////////////////////-->
-				<control type="group">
-					<posx>420</posx>
-					<width>400</width>
-					<height>480</height>
-					<control type="image">
+					<control type="group">
+						<posx>420</posx>
 						<width>400</width>
 						<height>480</height>
-						<texture>list_background.png</texture>
-					</control>
-					<control type="fixedlist" id="1202"><!-- ELENCO PODCAST -->
-						<width>400</width>
-						<height>480</height>
-						<visible>true</visible>
-						<orientation>vertical</orientation>
-						<ondown>1204</ondown>
-						<onup>6000</onup>
-						<onleft>9000</onleft>
-						<onright>6000</onright>
-						<focusposition>0</focusposition>
-						<itemlayout height="80">
-							<control type="image">
-								<height>80</height>
-								<width>400</width>
-								<texture>item_background.png</texture>
-							</control>
-							<control type="label">
-								<posx>70</posx>
-								<width>316</width>
-								<height>80</height>
-								<aligny>center</aligny>
-								<label>$INFO[ListItem.Label]</label>
-							</control>
-							<control type="image">
-								<posy>20</posy>
-								<posx>14</posx>
-								<width>42</width>
-								<height>42</height>
-								<texture>$INFO[ListItem.Genre]</texture>
-							</control>
-						</itemlayout>
-						<focusedlayout height="80">
-							<control type="image">
-								<width>400</width>
-								<height>80</height>
-								<texture>bg_focus.png</texture>
-							</control>
-							<control type="image">
-								<visible>Control.HasFocus(1202)</visible>
-								<width>400</width>
-								<height>80</height>
-								<texture>box_focused.png</texture>
-							</control>
-							<control type="button">
-								<width>400</width>
-								<height>80</height>
-								<texturefocus>box_focused.png</texturefocus>
-							</control>
-							<control type="image">
-								<width>63</width>
-								<height>63</height>
-								<posy>9</posy>
-								<posx>4</posx>
-								<texture>$INFO[ListItem.Genre]</texture>
-							</control>
-							<control type="label">
-								<width>306</width>
-								<height>80</height>
-								<posx>80</posx>
-								<aligny>center</aligny>
-								<scroll>true</scroll>
-								<font>font24b</font>
-								<label>$INFO[ListItem.Label]</label>
-							</control>
-						</focusedlayout>
-						<content type="action">
-							<onclick lang="python">
+						<control type="image">
+							<width>400</width>
+							<height>480</height>
+							<texture>list_background.png</texture>
+						</control>
+						<control type="fixedlist" id="1202"><!-- ELENCO PODCAST -->
+							<width>400</width>
+							<height>480</height>
+							<visible>true</visible>
+							<orientation>vertical</orientation>
+							<ondown>1204</ondown>
+							<onup>6000</onup>
+							<onleft>9000</onleft>
+							<onright>6000</onright>
+							<focusposition>0</focusposition>
+							<itemlayout height="96">
+								<control type="image">
+									<height>96</height>
+									<width>400</width>
+									<texture>item_background.png</texture>
+								</control>
+								<control type="label">
+									<posx>67</posx>
+									<width>318</width>
+									<height>96</height>
+									<aligny>center</aligny>
+									<label>$INFO[ListItem.Label]</label>
+								</control>
+								<control type="image">
+									<posy>28</posy>
+									<posx>15</posx>
+									<width>42</width>
+									<height>42</height>
+									<texture>$INFO[ListItem.Genre]</texture>
+								</control>
+							</itemlayout>
+							<focusedlayout height="96">
+								<control type="image">
+									<height>96</height>
+									<width>400</width>
+									<texture>item_background.png</texture>
+								</control>
+								<control type="image">
+									<width>400</width>
+									<height>96</height>
+									<texture>item_selected.png</texture>
+								</control>
+								<control type="image">
+									<visible>Control.HasFocus(1202)</visible>
+									<width>400</width>
+									<height>96</height>
+									<texture>box_focused.png</texture>
+								</control>
+								<control type="button">
+									<width>400</width>
+									<height>96</height>
+									<texturefocus>box_focused.png</texturefocus>
+								</control>
+								<control type="image">
+									<width>63</width>
+									<height>63</height>
+									<posy>17</posy>
+									<posx>15</posx>
+									<texture>$INFO[ListItem.Genre]</texture>
+								</control>
+								<control type="label">
+									<width>297</width>
+									<height>96</height>
+									<posx>88</posx>
+									<aligny>center</aligny>
+									<scroll>true</scroll>
+									<font>font24b</font>
+									<label>$INFO[ListItem.Label]</label>
+								</control>
+							</focusedlayout>
+							<content type="action">
+								<onclick lang="python">
 <![CDATA[
 if mc.GetPlayer().IsPlaying():
 	mc.GetPlayer().Stop()
 listaIN = mc.GetActiveWindow().GetList(1202)
 sel = listaIN.GetItem(listaIN.GetFocusedItem())
-conf= mc.GetApp().GetLocalConfig()
-win= mc.GetActiveWindow()
-conf.SetValue("pl",str(win.GetList(9000).GetFocusedItem()))
-#conf.SetValue("it",str(win.GetList(1202).GetFocusedItem()))
 mc.GetPlayer().PlayWithActionMenu(sel)
 ]]>
-							</onclick>
-						</content>
+								</onclick>
+							</content>
+						</control>
 					</control>
 				</control>
 <!--////////////////////////////////////////////////////////////////////
@@ -323,17 +305,20 @@ mc.GetPlayer().PlayWithActionMenu(sel)
 				<texture>toolbar_background.png</texture>
 			</control>
 			<control type="button" id="1203"><!-- LOGOUT -->
-				<posx>915</posx>
-				<posy>675</posy>
+				<posx>1150</posx>
+				<posy>677</posy>
 				<width>100</width>
-				<height>45</height>
-				<onup>9000</onup>
+				<height>42</height>
+				<onup>9001</onup>
 				<ondown>-</ondown>
 				<onright>-</onright>
 				<onleft>1204</onleft>
 				<align>center</align>
-				<aligny>center</aligny>
-				<texturefocus>box_focused.png</texturefocus>
+				<aligny>top</aligny>
+				<font>font22</font>
+				<textoffsety>5</textoffsety>
+				<texturenofocus>toolbar_button.png</texturenofocus>
+				<texturefocus>toolbar_focus.png</texturefocus>
 				<label>Logout</label>
 				<textcolor>white</textcolor>
 				<onclick lang="python">
@@ -348,19 +333,22 @@ if mc.ShowDialogConfirm('Logout', 'Vuoi effettuare il logout?', 'No', 'Yes'):
 				</onclick>
 			</control>
 			<control type="button" id="1204"><!-- REFRESH -->
-				<posx>40</posx>
-				<posy>675</posy>
+				<posx>30</posx>
+				<posy>677</posy>
 				<width>100</width>
-				<height>45</height>
-				<onup>9000</onup>
+				<height>42</height>
+				<onup>9001</onup>
 				<ondown>-</ondown>
 				<onright>1203</onright>
 				<onleft>9000</onleft>
 				<align>center</align>
-				<aligny>center</aligny>
+				<aligny>top</aligny>
+				<textoffsety>5</textoffsety>
 				<label>Refresh</label>
+				<font>font22</font>
 				<textcolor>white</textcolor>
-				<texturefocus>box_focused.png</texturefocus>
+				<texturenofocus>toolbar_button.png</texturenofocus>
+				<texturefocus>toolbar_focus.png</texturefocus>
 				<onclick lang="python">
 <![CDATA[
 if mc.GetPlayer().IsPlaying():
@@ -369,13 +357,20 @@ mc.ActivateWindow(15000)
 ]]>
 				</onclick>
 			</control>
+			<control type="image">
+				<posx>1090</posx>
+				<posy>677</posy>
+				<width>60</width>
+				<height>42</height>
+				<texture>user_icon.png</texture>
+			</control>
 			<control type="label" id="1205"><!-- USERNAME -->
-				<posx>1100</posx>
-				<posy>675</posy>
-				<width>300</width>
-				<height>45</height>
-				<font>font28b</font>
-				<aligny>rigth</aligny>
+				<posx>1090</posx>
+				<posy>677</posy>
+				<height>38</height>
+				<font>font22b</font>
+				<aligny>center</aligny>
+				<align>right</align>
 				<textcolor>white</textcolor>
 			</control>
 		</control>
