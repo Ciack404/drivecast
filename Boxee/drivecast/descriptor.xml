@@ -2,15 +2,14 @@
 	<id>drivecast</id>
 	<name>DriveCast</name>
 	<version>1.0</version>
-	<description>DriveCast is a Web-based media manager for your different devices: USB keys, smartphones, and cars. It catches your favorite content from the Web (audio/video) so you can collect them on your devices and play them whenever and wherever you want.</description>
-	<thumb>http://drivecast.googlecode.com/svn/trunk/drivecast.png</thumb>
+	<description>With DriveCast bring the best from the Internet to your media center: video podcasts, cloud files (Dropbox & Box.net), radio shows.</description>
+	<thumb>http://drivecast.googlecode.com/svn/trunk/dc_logo.png</thumb>
 	<repository>http://dir.boxee.tv/apps</repository>
 	<media>video</media>
 	<copyright>InRete</copyright>
-	<email>support@boxee.tv</email>
+	<email>glorfindel83@gmail.com</email>
 	<type>skin</type>
 	<startWindow>launch</startWindow>
 	<platform>all</platform>
 	<minversion>0.9.20</minversion>
-	<test-app>true</test-app>
 </app>
