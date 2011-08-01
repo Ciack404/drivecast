@@ -2,7 +2,7 @@
 	<id>drivecast</id>
 	<name>DriveCast</name>
 	<version>1.0</version>
-	<description>With DriveCast bring the best from the Internet to your media center: video podcasts, cloud files (Dropbox & Box.net), radio shows.</description>
+	<description>With DriveCast bring the best from the Internet to your media center: video podcasts, cloud files (Dropbox &amp; Box.net), radio shows.</description>
 	<thumb>http://drivecast.eu/images/dc_logo_boxee.png</thumb>
 	<repository>http://dir.boxee.tv/apps</repository>
 	<media>video</media>

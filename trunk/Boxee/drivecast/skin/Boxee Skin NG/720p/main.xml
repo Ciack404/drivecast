@@ -177,6 +177,14 @@ else:
 			<texturefocus>qr_code_focus.png</texturefocus>
 			<label>[COLOR ff666666]Click for manual pairing[/COLOR]</label>
 			<textcolor>black</textcolor>
+			<onclick lang="python">
+<![CDATA[
+try:
+	drivecast.qrcode_click()
+except:
+	mc.ShowDialogOk("Error","Login failed")
+]]>
+			</onclick>
 		</control>
 <!--////////////////////////////////////////////////////////////////////
 					PAIRING CODE

@@ -158,6 +158,19 @@ class qrcode_get(threading.Thread):
 				conf.Reset("qr")
 				log(up)
 
+def qrcode_click():
+	mc.ShowDialogWait()
+	conf= mc.GetApp().GetLocalConfig()
+	qr= conf.GetValue("qr")
+	get= read_resource("","pair/AppleTV/AppleTV/AppleTV/"+qr)
+	if get["statuscode"]!=404:
+		up= str(get["Authorization"])
+		us = standard_b64decode(up).split(":")[0]
+		mc.GetApp().GetLocalConfig().SetValue("username",us)
+		conf.Reset("qr")
+		mc.HideDialogWait()
+		log(up)
+
 #========================================================================================
 #	GUEST USER																	<<<OK>>>>
 #========================================================================================
