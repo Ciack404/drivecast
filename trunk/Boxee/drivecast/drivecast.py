@@ -114,12 +114,12 @@ def manage_RSS():
 		itempl.SetProperty("pl",plname)
 		itempl.SetThumbnail("playlist.png")
 		playl.append(itempl)
-	playlistOUT = mc.GetActiveWindow().GetList(9000)
-	playlistOUT.SetItems(playl)
-	playlistOUT.SetVisible(True)
 	listaOUT = wind.GetList(1200)
 	listaOUT.SetItems(lista)
 	listaOUT.SetVisible(True)
+	playlistOUT = wind.GetList(9001)
+	playlistOUT.SetItems(playl)
+	playlistOUT.SetVisible(True)
 
 #========================================================================================
 #	QRCODE																		<<<OK>>>>
@@ -156,7 +156,7 @@ class qrcode_get(threading.Thread):
 				us = standard_b64decode(up).split(":")[0]
 				mc.GetApp().GetLocalConfig().SetValue("username",us)
 				conf.Reset("qr")
-				log(str(get["Authorization"]))
+				log(up)
 
 #========================================================================================
 #	GUEST USER																	<<<OK>>>>
@@ -214,6 +214,6 @@ def guest():
 	item.SetProperty("pl","")
 	item.SetThumbnail("library.png")
 	playl.append(item)
-	playlistOUT = mc.GetActiveWindow().GetList(9000)
+	playlistOUT = mc.GetActiveWindow().GetList(9001)
 	playlistOUT.SetItems(playl)
 	playlistOUT.SetVisible(True)

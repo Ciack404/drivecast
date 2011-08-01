@@ -9,6 +9,7 @@ from base64 import standard_b64encode
 
 mc.ShowDialogWait()
 drivecast.qrcode_post()
+mc.GetActiveWindow().GetControl(1103).SetFocus()
 mc.HideDialogWait()
 drivecast.qrcode_get().start()
 ]]>
@@ -28,103 +29,110 @@ drivecast.qrcode_get().start()
 <!--////////////////////////////////////////////////////////////////////
 						GUEST USER
 ////////////////////////////////////////////////////////////////////-->
-		<control type="image">
-			<posx>20</posx>
-			<posy>200</posy>
-			<width>390</width>
-			<height>450</height>
-			<texture>black.png</texture>
-			<colordiffuse>grey</colordiffuse>
+		<control type="image">	<!-- QUI IMMAGINE BACKGROUND GUEST -->
+			<posx>240</posx>
+			<posy>140</posy>
+			<width>800</width>
+			<height>100</height>
+			<texture>login_top_bg.png</texture>
 		</control>
-		<control type="button" id="1103">
-			<posx>20</posx>
-			<posy>200</posy>
-			<width>390</width>
-			<height>450</height>
+		<control type="button" id="1103">	<!-- PULSANTE TRY -->
+			<posx>880</posx>
+			<posy>160</posy>
+			<width>140</width>
+			<height>60</height>
 			<onleft>-</onleft>
-			<onright>4001</onright>
+			<onright>-</onright>
 			<onup>-</onup>
-			<ondown>-</ondown>
+			<ondown>4001</ondown>
 			<textcolor>grey</textcolor>
 			<focusedcolor>white</focusedcolor>
-			<texturenofocus>-</texturenofocus>
-			<texturefocus>bg_focus.png</texturefocus>
+			<texturenofocus>login_button.png</texturenofocus>
+			<texturefocus>login_button_focus.png</texturefocus>
 			<font>font26</font>
 			<align>center</align>
-			<aligny>center</aligny>
+			<label>Try it</label>
+			<textoffsety>12</textoffsety>
 			<onclick>ActivateWindow(15000)</onclick>
 		</control>
-		<control type="label">
-			<posx>40</posx>
-			<posy>240</posy>
-			<height>400</height>
-			<width>350</width>
-			<label>Premi ok per entrare come ospite e prova il widget con una selezione di contenuti audio e video HD</label>
+		<control type="label">	<!-- DESCRIZIONE TRY -->
+			<posx>260</posx>
+			<posy>155</posy>
+			<height>65</height>
+			<width>605</width>
+			<label>If you don't have a DriveCast account sign up for free at [COLOR ffff7f00]http://drivecast.eu[/COLOR] or try it as demo user</label>
 			<wrapmultiline>true</wrapmultiline>
+			<font>font26</font>
 		</control>
 <!--////////////////////////////////////////////////////////////////////
 						LOGIN FORM
 ////////////////////////////////////////////////////////////////////-->
-		<control type="group">
-			<visible>true</visible>
-			<focusposition>2</focusposition>
-			<posx>450</posx>
-			<posy>200</posy>
-			<control type="image">
-				<posx>0</posx>
-				<posy>0</posy>
-				<width>800</width>
-				<height>450</height>
-				<texture>black.png</texture>
-				<colordiffuse>grey</colordiffuse>
-			</control>
-			<control type="edit" id="4001">
-				<posx>30</posx>
-				<posy>50</posy>
-				<width>300</width>
-				<height>100</height>
-				<onup>-</onup>
-				<onleft>1103</onleft>
-				<onright>-</onright>
-				<ondown>4002</ondown>
-				<label>Username</label>
-				<textcolor>grey</textcolor>
-				<focusedcolor>white</focusedcolor>
-				<texturefocus>box_focused.png</texturefocus>
-				<textoffsetx>8</textoffsetx>
-			</control>
-			<control type="edit" id="4002">
-				<posx>30</posx>
-				<posy>150</posy>
-				<password>true</password>
-				<width>300</width>
-				<height>100</height>
-				<onright>-</onright>
-				<onleft>1103</onleft>
-				<onup>4001</onup>
-				<ondown>4003</ondown>
-				<label>Password</label>
-				<textcolor>grey</textcolor>
-				<focusedcolor>white</focusedcolor>
-				<texturefocus>box_focused.png</texturefocus>
-				<textoffsetx>8</textoffsetx>
-			</control>
-			<control type="button" id="4003">
-				<posx>30</posx>
-				<posy>300</posy>
-				<width>300</width>
-				<height>100</height>
-				<align>center</align>
-				<aligny>center</aligny>
-				<onup>4002</onup>
-				<ondown>-</ondown>
-				<onright>-</onright>
-				<onleft>1103</onleft>
-				<texturefocus>box_focused.png</texturefocus>
-				<textcolor>grey</textcolor>
-				<focusedcolor>white</focusedcolor>
-				<label>Ok</label>
-				<onclick lang="python">
+		<control type="image">	<!-- BACKGROUND FORM LOGIN E QR CODE -->
+			<posx>240</posx>
+			<posy>280</posy>
+			<width>800</width>
+			<height>380</height>
+			<texture>login_box_bg.png</texture>
+		</control>
+		<control type="label">	<!-- DESCRIZIONE LOGIN -->
+			<posx>260</posx>
+			<posy>295</posy>
+			<height>65</height>
+			<width>735</width>
+			<label>Log in by typing your username and password or scanning the QR code with your mobile</label>
+			<wrapmultiline>true</wrapmultiline>
+			<font>font26</font>
+		</control>
+		<control type="edit" id="4001">	<!-- USERNAME -->
+			<posx>260</posx>
+			<posy>380</posy>
+			<width>460</width>
+			<height>80</height>
+			<onup>1103</onup>
+			<onleft>-</onleft>
+			<onright>2002</onright>
+			<ondown>4002</ondown>
+			<label>Username</label>
+			<textcolor>grey</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<texturenofocus>login_input.png</texturenofocus>
+			<texturefocus>login_input_focus.png</texturefocus>
+			<textoffsetx>8</textoffsetx>
+		</control>
+		<control type="edit" id="4002">	<!-- PASSWORD -->
+			<posx>260</posx>
+			<posy>480</posy>
+			<password>true</password>
+			<width>460</width>
+			<height>80</height>
+			<onright>2002</onright>
+			<onleft>-</onleft>
+			<onup>4001</onup>
+			<ondown>4003</ondown>
+			<label>Password</label>
+			<textcolor>grey</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<texturenofocus>login_input.png</texturenofocus>
+			<texturefocus>login_input_focus.png</texturefocus>
+			<textoffsetx>8</textoffsetx>
+		</control>
+		<control type="button" id="4003">	<!-- BOTTONE LOGIN -->
+			<posx>580</posx>
+			<posy>580</posy>
+			<width>140</width>
+			<height>60</height>
+			<align>center</align>
+			<onup>4002</onup>
+			<ondown>-</ondown>
+			<onright>2002</onright>
+			<onleft>-</onleft>
+			<texturenofocus>login_button.png</texturenofocus>
+			<texturefocus>login_button_focus.png</texturefocus>
+			<textcolor>grey</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<label>Log in</label>
+			<textoffsety>15</textoffsety>
+			<onclick lang="python">
 <![CDATA[
 mc.ShowDialogWait()
 us = mc.GetWindow(14000).GetEdit(4001).GetText()
@@ -143,34 +151,50 @@ else:
 		mc.HideDialogWait()
 		mc.ShowDialogOk("Error","Login failed")
 ]]>
-				</onclick>
-			</control>
+			</onclick>
+		</control>
 <!--////////////////////////////////////////////////////////////////////
 						QR CODE
 ////////////////////////////////////////////////////////////////////-->
-			<control type="largeimage" id="2000">
-				<posx>480</posx>
-				<posy>250</posy>
-				<width>165</width>
-				<height>165</height>
-			</control>
+		<control type="largeimage" id="2000">
+			<posx>760</posx>
+			<posy>380</posy>
+			<width>260</width>
+			<height>260</height>
+		</control>
+		<control type="button" id="2002">
+			<posx>757</posx>
+			<posy>377</posy>
+			<width>266</width>
+			<height>266</height>
+			<onup>1103</onup>
+			<onleft>4001</onleft>
+			<onright>-</onright>
+			<ondown>-</ondown>
+			<textoffsety>234</textoffsety>
+			<align>center</align>
+			<font>font18b</font>
+			<texturefocus>qr_code_focus.png</texturefocus>
+			<label>[COLOR ff666666]Click for manual pairing[/COLOR]</label>
+			<textcolor>black</textcolor>
+		</control>
 <!--////////////////////////////////////////////////////////////////////
-						PAIRING CODE
+					PAIRING CODE
 ////////////////////////////////////////////////////////////////////-->
-			<control type="label">
-				<posx>420</posx>
-				<posy>40</posy>
-				<width>350</width>
-				<height>150</height>
-				<label>Visita il sito http://drivecast.eu/pair sul tuo pc e inserisci questo codice per abbinare la tv al tuo account drivecast</label>
-				<wrapmultiline>true</wrapmultiline>
-			</control>
-			<control type="label" id="2001">
-				<posx>530</posx>
-				<posy>190</posy>
-				<width>300</width>
-				<font>font28b</font>
-			</control>
+		<control type="label">	<!-- TESTO PAIRING -->
+			<posx>200</posx>
+			<posy>675</posy>
+			<width>800</width>
+			<label>Typing is a pain? Go to [COLOR ffff7f00]www.drivecast.eu/pair[/COLOR] on your pc and insert the code:</label>
+			<textcolor>black</textcolor>
+			<font>font22</font>
+		</control>
+		<control type="label" id="2001">	<!-- CODICE PAIRING -->
+			<posx>995</posx>
+			<posy>675</posy>
+			<width>100</width>
+			<textcolor>black</textcolor>
+			<font>font22b</font>
 		</control>
 	</controls>
 </window>
