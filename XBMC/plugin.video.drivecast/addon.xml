@@ -14,8 +14,7 @@
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <summary>Drivecast</summary>
-    <description lang="en">Plugin that let's you connect to your Drivecast account!</description>
+    <description lang="en">With DriveCast bring the best from the Internet to your media center: video podcasts, cloud files (Dropbox and Box.net), radio shows.</description>
     <description lang="it">Plugin che ti permette di connetterti al tuo account Drivecast!</description>
-    <disclaimer>Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
   </extension>
 </addon>
