@@ -19,11 +19,13 @@ __rss__= __settings__.getSetting("rss")
 #	LOG MENU																	<<<OK>>>>
 #========================================================================================
 def log_menu():
-	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?guest",listitem=xbmcgui.ListItem("Prova DriveCast come utente guest",iconImage=__thumbnails__+"user.png", thumbnailImage=__thumbnails__+"user.png"),isFolder=True)
-	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?form",listitem=xbmcgui.ListItem("Login...",iconImage=__thumbnails__+"user.png", thumbnailImage=__thumbnails__+"user.png"),isFolder=True)
+	trying= xbmcgui.ListItem("Prova DriveCast come utente guest",iconImage=__thumbnails__+"guest.png", thumbnailImage=__thumbnails__+"user.png")
+	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?guest",listitem=trying, isFolder=True)
+	log_form= xbmcgui.ListItem("Login...",iconImage=__thumbnails__+"user.png", thumbnailImage=__thumbnails__+"user.png")
+	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?form",listitem=log_form,isFolder=True)
 	qr= qrcode_post()
-	qrcode_get().start()
-	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?qrcode",listitem=xbmcgui.ListItem("Login via QR Code"+__settings__.getSetting("qr"),iconImage=qr, thumbnailImage=qr),isFolder=True)
+	qr_menu= xbmcgui.ListItem("Login via http://drivecast.eu/pair/ con codice: "+__settings__.getSetting("qr"), iconImage=qr, thumbnailImage=qr)
+	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?qrcode",listitem=qr_menu, isFolder=True)
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 #========================================================================================
@@ -38,25 +40,16 @@ def qrcode_post():
 	__settings__.setSetting("qr",str(data["paircode"]))
 	return str(data["QRcode"])+".png"
 
-class qrcode_get(threading.Thread):
-	def run(self):
-		qr= __settings__.getSetting("qr")
-		request = ""
-		while request!="OK":
-			try:
-				conn = httplib.HTTPConnection("push.drivecast.eu:80")
-				conn.request("GET", "/listen/?channel="+qr)
-				request = conn.getresponse().read()
-			except urllib2.HTTPError, e:
-				print "TIMEOUT"
-		if request == "OK":
-			get= read_resource("","pair/AppleTV/AppleTV/AppleTV/"+qr)
-			if get["statuscode"]!=404:
-				up= str(get["Authorization"])
-				us = b64decode(up).split(":")[0]
-				__settings__.setSetting("login_name",us)
-				__settings__.setSetting("qr","")
-				log(str(get["Authorization"]))
+def qrcode_click():
+	qr= __settings__.getSetting("qr")
+	try:
+		get= read_resource("","pair/AppleTV/AppleTV/AppleTV/"+qr)
+		up= str(get["Authorization"])
+		us = b64decode(up).split(":")[0]
+		__settings__.setSetting("login_name",us)
+		log(str(get["Authorization"]))
+	except:
+		xbmc.executebuiltin("Notification(Errore,Nessun pairing rilevato)")
 
 #========================================================================================
 #	LOG FUNCTION																<<<OK>>>>
@@ -84,67 +77,83 @@ def logout():
 	__settings__.setSetting("login_pass",'')	#PASSWORD
 	__settings__.setSetting("rss",'')			#RSS
 	__settings__.setSetting("up","")			#USER:PASS
+	xbmc.executebuiltin("Container.Update("+sys.argv[0]+")")
 
 #========================================================================================
-#	ELENCO ITEMS																<<<OK>>>>
+#	ELENCO PLAYLISTS															<<<OK>>>>
 #========================================================================================
 def playlists():
-	playl= read_resource(__settings__.getSetting("up"), "playlist?type=Boxee")
-	fu= xbmcgui.ListItem(label="Library", thumbnailImage=__thumbnails__+"library.png", path=sys.argv[0])
-	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sys.argv[0], listitem=fu)
+	playl= read_resource(__settings__.getSetting("up"), "playlist/XBMC?type=device")
+	fu= xbmcgui.ListItem(label="Library", thumbnailImage=__thumbnails__+"library.png", path=sys.argv[0]+"??")
+	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sys.argv[0]+"??", listitem=fu, isFolder=True)
 	for pl in playl["elements"]:
-		u=sys.argv[0]+"?"+pl["name"]
+		u=sys.argv[0]+"??"+pl["name"]
 		item= xbmcgui.ListItem(label=pl["name"], thumbnailImage=__thumbnails__+"pl.png", path=u)
-		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=item)
-		#addDir("----------  "+pl["name"],"1",__thumbnails__+"pl.png",pl["name"])	#u'\U0001D15F'
+		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=item, isFolder=True)
 	lo= xbmcgui.ListItem(label="Logout...", thumbnailImage=__thumbnails__+"user.png", path=sys.argv[0]+"?logout")
-	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sys.argv[0]+"?logout", listitem=lo)
-	
+	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sys.argv[0]+"?logout", listitem=lo, isFolder=True)
+	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 #========================================================================================
 #	ELENCO ITEMS																<<<OK>>>>
 #========================================================================================
-def manage_RSS():
-	xbmc.executebuiltin("Container.Udate")
-	"""itempl= xbmcgui.ListItem(label="Library", ThumbnailImage=__thumbnails__+"library.png")
-	itempl.SetProperty("pl","")
-	playl.append(itempl)"""
-	lo= xbmcgui.ListItem(label="Logout...", thumbnailImage=__thumbnails__+"user.png", path=sys.argv[0]+"?logout")
-	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sys.argv[0]+"?logout", listitem=lo)
+def manage_RSS(playlist):
 	feed= read_RSS()
+	empty= True
+	print playlist+" LIBRARY <<<-----------------------------------------------------"
 	for item in feed.getElementsByTagName('item'):
-		item_url = item.getElementsByTagName('guid')[0].firstChild.data.encode('utf-8')					#path
-		item_title = item.getElementsByTagName("title")[0].firstChild.data.encode('utf-8')				#label
-		item_author = item.getElementsByTagName("author")[0].firstChild.data.encode('utf-8')			#label2
-		item_thumb = item.getElementsByTagName("carcast:thumbnail")[0].firstChild.data.encode('utf-8')	#thumbnailimage
-		item_type = item.getElementsByTagName("carcast:element_type")[0].firstChild.data.encode('utf-8')
-		desc = item.getElementsByTagName('description')[0].firstChild
+		playl=item.getElementsByTagName('carcast:playlists_string')
+		if playl:
+			pl= playl[0].firstChild.data.encode('utf-8')
+		else:
+			pl= ""
+		if(pl==playlist or pl.endswith(","+playlist) or pl.startswith(playlist+",") or pl.find(","+playlist+",")!=-1 or playlist==""):
+			item_url = item.getElementsByTagName('guid')[0].firstChild.data.encode('utf-8')					#path
+			item_title = item.getElementsByTagName("title")[0].firstChild.data.encode('utf-8')				#label
+			item_author = item.getElementsByTagName("author")[0].firstChild.data.encode('utf-8')			#label2
+			item_thumb = item.getElementsByTagName("carcast:thumbnail")[0].firstChild.data.encode('utf-8')	#thumbnailimage
+			item_type = item.getElementsByTagName("carcast:element_type")[0].firstChild.data.encode('utf-8')
+			elem= xbmcgui.ListItem(label=item_title, label2=item_author, thumbnailImage=item_thumb, path=item_url)
+			if item_type==("video"):
+				elem.setInfo(type="Video", infoLabels={"Title": item_title})
+			elif item_type==("audio"):
+				elem.setInfo(type="Music", infoLabels={"Title": item_title})
+			else:
+				elem.setInfo(type="Music", infoLabels={"Title": item_title})
+			xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=item_url, listitem=elem, isFolder=False)
+			empty= False
+	if empty:
+		xbmc.executebuiltin("Notification(Errore,Empty playlist)")
+	else:
+		xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+#========================================================================================
+#	GUEST USER																	<<<OK>>>>
+#========================================================================================
+def guest():
+	params= urllib.urlencode({'username': 'guest', 'type': 'drivecast', 'useragent': 'Boxee', 'device_type' : 'boxee', 'device_name' : 'boxee'})
+	header= {"Content-type": "application/x-www-form-urlencoded"}
+	conn = httplib.HTTPConnection("widgets.inrete.it:80")
+	conn.request("POST", "/widget-boxee.php", params, header)
+	response = conn.getresponse()
+	res= response.read()
+	data= parseString(res.split("?>")[1])
+	conn.close()
+	for item in data.getElementsByTagName('item'):
+		playl=item.getElementsByTagName('carcast:playlists_string')
+		item_url = item.getElementsByTagName('url')[0].firstChild.data.encode('utf-8')
+		item_title = item.getElementsByTagName("title")[0].firstChild.data.encode('utf-8')
+		item_author = item.getElementsByTagName("author")[0].firstChild.data.encode('utf-8')
+		item_thumb = item.getElementsByTagName("thumbnail")[0].firstChild.data.encode('utf-8')
+		item_type = item.getElementsByTagName("type")[0].firstChild.data.encode('utf-8')
 		elem= xbmcgui.ListItem(label=item_title, label2=item_author, thumbnailImage=item_thumb, path=item_url)
 		if item_type==("video"):
 			elem.setInfo(type="Video", infoLabels={"Title": item_title})
-			elem.setIconImage(__thumbnails__+"video_icon.png")
 		elif item_type==("audio"):
 			elem.setInfo(type="Music", infoLabels={"Title": item_title})
-			elem.setIconImage(__thumbnails__+"audio_icon.png")
 		else:
 			elem.setInfo(type="Music", infoLabels={"Title": item_title})
-			elem.setIconImage(__thumbnails__+"radio_icon.png")
-		pl=item.getElementsByTagName('carcast:playlists_string')
-		"""if pl:
-			item_playlist = pl[0].firstChild.data.encode('utf-8')
-			temp="["+item_playlist+"]"
-			playli= temp[1:-1].split(',')
-			for pla in playli:
-				exist[pla]= 0
-			elem.SetProperty("pl",item_playlist)
-		lista.append((item_url,elem,False))
-	for plname in exist:
-		itempl=xbmcgui.ListItem(label=plname, ThumbnailImage=__thumbnails__+"playlist.png")
-		itempl.SetProperty("pl",plname)
-		playl.append(itempl)"""
-		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=item_url,listitem=elem)
-	#playl E L'ELENCO DELLE PLAYLIST
-	#lista È L'ELENCO DELLE ITEM
+		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=item_url, listitem=elem)
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 #========================================================================================
@@ -189,9 +198,13 @@ if __rss__ == "":
 		guest()
 	elif mode=="form":
 		login_form()
+	elif mode=="qrcode":
+		qrcode_click()
 else:
-	if mode =="logout":
+	if mode == "logout":
 		logout()
-		xbmc.executebuiltin("Container.Update("+sys.argv[0]+")")
+	elif mode == "":
+		playlists()
 	else:
-		manage_RSS()
+		print mode[1:]+" PLAYLIST SELEZIONATA <<<--------------------------------------------------------"
+		manage_RSS(mode[1:])
