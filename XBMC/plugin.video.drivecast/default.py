@@ -1,3 +1,21 @@
+'''
+	DriveCast plugin for XBMC
+	Copyright (C) 2011 Francesco Alisetta
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
 # -*- coding: utf-8 -*-
 
 import sys, xbmc, xbmcaddon, xbmcplugin, xbmcgui, urllib, urllib2, unicodedata, httplib, threading
@@ -19,12 +37,12 @@ __rss__= __settings__.getSetting("rss")
 #	LOG MENU																	<<<OK>>>>
 #========================================================================================
 def log_menu():
-	trying= xbmcgui.ListItem("Prova DriveCast come utente guest",iconImage=__thumbnails__+"guest.png", thumbnailImage=__thumbnails__+"user.png")
+	trying= xbmcgui.ListItem(__language__(30011),iconImage=__thumbnails__+"guest.png", thumbnailImage=__thumbnails__+"guest.png")
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?guest",listitem=trying, isFolder=True)
-	log_form= xbmcgui.ListItem("Login...",iconImage=__thumbnails__+"user.png", thumbnailImage=__thumbnails__+"user.png")
+	log_form= xbmcgui.ListItem(__language__(30013),iconImage=__thumbnails__+"user.png", thumbnailImage=__thumbnails__+"user.png")
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?form",listitem=log_form,isFolder=True)
 	qr= qrcode_post()
-	qr_menu= xbmcgui.ListItem("Login via http://drivecast.eu/pair/ con codice: "+__settings__.getSetting("qr"), iconImage=qr, thumbnailImage=qr)
+	qr_menu= xbmcgui.ListItem(__language__(30010), iconImage=qr, thumbnailImage=qr)
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?qrcode",listitem=qr_menu, isFolder=True)
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -49,7 +67,7 @@ def qrcode_click():
 		__settings__.setSetting("login_name",us)
 		log(str(get["Authorization"]))
 	except:
-		xbmc.executebuiltin("Notification(Errore,Nessun pairing rilevato)")
+		xbmc.executebuiltin("Notification("+__language__(30006)+","+__language__(30012)+")")
 
 #========================================================================================
 #	LOG FUNCTION																<<<OK>>>>
@@ -88,7 +106,7 @@ def playlists():
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sys.argv[0]+"??", listitem=fu, isFolder=True)
 	for pl in playl["elements"]:
 		u=sys.argv[0]+"??"+pl["name"]
-		item= xbmcgui.ListItem(label=pl["name"], thumbnailImage=__thumbnails__+"pl.png", path=u)
+		item= xbmcgui.ListItem(label=pl["name"], thumbnailImage=__thumbnails__+"playlist.png", path=u)
 		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=item, isFolder=True)
 	lo= xbmcgui.ListItem(label="Logout...", thumbnailImage=__thumbnails__+"user.png", path=sys.argv[0]+"?logout")
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sys.argv[0]+"?logout", listitem=lo, isFolder=True)
@@ -100,7 +118,6 @@ def playlists():
 def manage_RSS(playlist):
 	feed= read_RSS()
 	empty= True
-	print playlist+" LIBRARY <<<-----------------------------------------------------"
 	for item in feed.getElementsByTagName('item'):
 		playl=item.getElementsByTagName('carcast:playlists_string')
 		if playl:
@@ -123,7 +140,7 @@ def manage_RSS(playlist):
 			xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=item_url, listitem=elem, isFolder=False)
 			empty= False
 	if empty:
-		xbmc.executebuiltin("Notification(Errore,Empty playlist)")
+		xbmc.executebuiltin("Notification("+__language__(30008)+","+__language__(30009)+")")
 	else:
 		xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -206,5 +223,4 @@ else:
 	elif mode == "":
 		playlists()
 	else:
-		print mode[1:]+" PLAYLIST SELEZIONATA <<<--------------------------------------------------------"
 		manage_RSS(mode[1:])
