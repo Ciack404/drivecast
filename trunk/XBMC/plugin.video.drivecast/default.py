@@ -116,9 +116,8 @@ def playlists():
 #	ELENCO ITEMS																<<<OK>>>>
 #========================================================================================
 def manage_RSS(playlist):
-	feed= read_RSS()
 	empty= True
-	for item in feed.getElementsByTagName('item'):
+	for item in __feed__.getElementsByTagName('item'):
 		playl=item.getElementsByTagName('carcast:playlists_string')
 		if playl:
 			pl= playl[0].firstChild.data.encode('utf-8')
@@ -218,6 +217,7 @@ if __rss__ == "":
 	elif mode=="qrcode":
 		qrcode_click()
 else:
+	__feed__= read_RSS()
 	if mode == "logout":
 		logout()
 	elif mode == "":
